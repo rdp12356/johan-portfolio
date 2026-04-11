@@ -4,6 +4,7 @@ import AnimatedCursor from './components/AnimatedCursor'
 import Contact from './components/Contact'
 import Experience from './components/Experience'
 import Footer from './components/Footer'
+import GamificationHud from './components/GamificationHud'
 import Hero from './components/Hero'
 import InteractiveBackground from './components/InteractiveBackground'
 import Navbar from './components/Navbar'
@@ -12,6 +13,7 @@ import Projects from './components/Projects'
 import Skills from './components/Skills'
 import { navLinks } from './data/content'
 import { useActiveSection } from './hooks/useActiveSection'
+import { useGamification } from './hooks/useGamification'
 import { useTheme } from './hooks/useTheme'
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
   const { theme, toggleTheme } = useTheme()
   const sectionIds = useMemo(() => navLinks.map((link) => link.id), [])
   const activeSection = useActiveSection(sectionIds)
+  const game = useGamification()
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -34,6 +37,7 @@ function App() {
       <AnimatedCursor />
       <Preloader isLoading={isLoading} />
       <Navbar activeSection={activeSection} theme={theme} onToggleTheme={toggleTheme} />
+      <GamificationHud game={game} />
 
       <main>
         <Hero />
