@@ -1,70 +1,71 @@
 import { motion as Motion } from 'framer-motion'
-import { FiCode, FiDatabase, FiLayers, FiTerminal } from 'react-icons/fi'
 import { skills } from '../data/content'
 import SectionTitle from './SectionTitle'
-import TiltCard from './TiltCard'
+import { FaReact, FaPython } from 'react-icons/fa'
+import { SiTailwindcss, SiSupabase, SiN8N } from 'react-icons/si'
+import { VscAzure } from 'react-icons/vsc'
 
 const iconMap = {
-  Frontend: FiLayers,
-  Programming: FiTerminal,
-  Backend: FiDatabase,
-  'App Development': FiCode,
+  React: FaReact,
+  Tailwind: SiTailwindcss,
+  Supabase: SiSupabase,
+  Azure: VscAzure,
+  Python: FaPython,
+  n8n: SiN8N,
+}
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
 }
 
 function Skills() {
   return (
     <section id="skills" className="px-6 py-24 sm:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-4xl">
         <SectionTitle
-          eyebrow="Skills"
-          title="Tools and Stacks I Build With"
-          description="A focused skillset across frontend, app development, and modern backend services."
+          title="Tools I use"
+          subtitle="The tech stack I rely on to bring my ideas to life."
         />
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <Motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-6"
+        >
           {skills.map((skill, index) => {
-            const Icon = iconMap[skill.category] || FiCode
+            const Icon = iconMap[skill.name]
             return (
-              <TiltCard key={skill.name} className="futuristic-card hover-glow">
-                <Motion.article
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.55, delay: index * 0.04 }}
-                  whileHover={{ y: -4 }}
-                  className="glass-card p-5"
-                >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/15 text-cyan-500 dark:text-cyan-300">
-                      <Icon size={18} />
-                    </span>
-                    <div>
-                      <h3 className="text-base font-medium text-slate-900 dark:text-white">{skill.name}</h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{skill.category}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">{skill.level}%</p>
+              <Motion.div
+                key={index}
+                variants={itemVariants}
+                className="group flex flex-col items-center justify-center rounded-3xl border border-slate-100 bg-white p-8 transition-all hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="text-4xl text-slate-400 transition-colors group-hover:text-cyan-500 dark:text-slate-600 dark:group-hover:text-cyan-500">
+                  {Icon && <Icon />}
                 </div>
-
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-300/50 dark:bg-white/10">
-                  <Motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.level}%` }}
-                    viewport={{ once: true, amount: 0.6 }}
-                    transition={{ duration: 0.9, delay: 0.15 + index * 0.04, ease: 'easeOut' }}
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-indigo-400"
-                  />
-                </div>
-                </Motion.article>
-              </TiltCard>
+                <h4 className="mt-4 text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white">
+                  {skill.name}
+                </h4>
+              </Motion.div>
             )
           })}
-        </div>
+        </Motion.div>
       </div>
     </section>
   )
 }
 
 export default Skills
-

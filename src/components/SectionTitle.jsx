@@ -1,24 +1,29 @@
 import { motion as Motion } from 'framer-motion'
 
-function SectionTitle({ eyebrow, title, description }) {
+function SectionTitle({ title, subtitle, centered = true }) {
   return (
-    <Motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="mx-auto mb-12 max-w-2xl text-center"
-    >
-      <p className="text-xs uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold leading-tight text-slate-900 dark:text-white sm:text-4xl">
+    <div className={`max-w-3xl ${centered ? 'mx-auto text-center' : ''}`}>
+      <Motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 backdrop-blur-md"
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse" />
         {title}
-      </h2>
-      {description ? (
-        <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">{description}</p>
-      ) : null}
-    </Motion.div>
+      </Motion.div>
+      
+      <Motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="mt-6 text-4xl font-black tracking-tighter text-slate-900 dark:text-white sm:text-5xl md:text-6xl"
+      >
+        {subtitle}
+      </Motion.h2>
+    </div>
   )
 }
 
 export default SectionTitle
-

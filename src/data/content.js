@@ -1,83 +1,56 @@
 export const navLinks = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
+  { id: 'activity', label: 'Activity' },
+  { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ]
 
+export const personalInfo = {
+  name: 'Johan Manoj',
+  age: 17,
+  location: 'Kochi',
+  intro: 'Hey, I’m Johan 👋',
+  tagline: '17-year-old developer building AI tools, automation systems, and high-performance cloud infrastructure.',
+  about: 'I’m a 17-year-old builder from Kochi, India. I specialize in AI automation, cloud systems, and creating sleek digital experiences. My journey started with a curiosity about how things work, and it turned into an obsession with building systems that scale and automate the boring stuff.',
+  email: 'johanmanoj2009@gmail.com',
+  github: 'https://github.com/rdp12356',
+  instagram: 'https://instagram.com/johanmanoj01',
+  linkedin: 'https://www.linkedin.com/in/johanmanoj2009',
+  roles: ['Builder', 'Automation Developer', 'AI Explorer', 'Cloud Architect'],
+}
+
 export const skills = [
-  { name: 'HTML', level: 95, category: 'Frontend' },
-  { name: 'CSS', level: 92, category: 'Frontend' },
-  { name: 'JavaScript', level: 90, category: 'Frontend' },
-  { name: 'React', level: 88, category: 'Frontend' },
-  { name: 'Tailwind CSS', level: 90, category: 'Frontend' },
-  { name: 'Python', level: 84, category: 'Programming' },
-  { name: 'Kivy', level: 78, category: 'App Development' },
-  { name: 'Supabase', level: 80, category: 'Backend' },
-  { name: 'Firebase', level: 82, category: 'Backend' },
+  { name: 'React', level: 90, icon: 'React' },
+  { name: 'Tailwind', level: 95, icon: 'Tailwind' },
+  { name: 'Python', level: 85, icon: 'Python' },
+  { name: 'Supabase', level: 80, icon: 'Supabase' },
+  { name: 'Azure', level: 75, icon: 'Azure' },
+  { name: 'n8n', level: 92, icon: 'n8n' },
 ]
 
-export const defaultProjects = [
+export const exploring = [
   {
-    id: 'zertainity',
-    title: 'Zertainity',
-    description:
-      'AI-powered career guidance platform helping students discover the best academic and career pathways.',
-    image:
-      'https://images.unsplash.com/photo-1529078155058-5d716f45d604?auto=format&fit=crop&w=1400&q=80',
-    liveUrl: 'https://www.zertainity.in/',
-    githubUrl: 'https://github.com/rdp12356/Zertainity',
-    updatedAt: '2026-04-11T00:00:00.000Z',
+    title: 'AI Workflows',
+    icon: 'Zap',
+    description: 'Mastering complex multi-step AI agent interactions and autonomous agents.',
   },
   {
-    id: 'expense-master',
-    title: 'ExpenseMaster',
-    description:
-      'Open-source expense management system built with Python, Supabase, and Vercel deployment workflows.',
-    image:
-      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80',
-    liveUrl: 'https://expense-master-xi.vercel.app/',
-    githubUrl: 'https://github.com/rdp12356/ExpenseMaster',
-    updatedAt: '2026-03-28T00:00:00.000Z',
+    title: 'Cloud Infra',
+    icon: 'Cloud',
+    description: 'Deep diving into serverless architectures, edge computing, and infrastructure as code.',
   },
   {
-    id: 'cyberguardian-platform',
-    title: 'CyberGuardian Platform',
-    description:
-      'Comprehensive cybersecurity platform featuring interactive tools, analytics, and threat management modules.',
-    image:
-      'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1400&q=80',
-    liveUrl: '',
-    githubUrl: 'https://github.com/rdp12356/cyberguardian-platform',
-    updatedAt: '2025-06-22T00:00:00.000Z',
+    title: 'SaaS Builder',
+    icon: 'DollarSign',
+    description: 'Developing systems that can generate passive revenue and scale automatically.',
   },
 ]
 
-export const timeline = [
-  {
-    year: '2026',
-    title: 'Built AMARE Charity Platform',
-    details:
-      'Designed and shipped a real-world platform with donor flow, campaign stories, and outcome-first metrics.',
-  },
-  {
-    year: '2025',
-    title: 'Hackathon Finalist',
-    details:
-      'Co-built an AI-powered productivity prototype and presented it to industry mentors and student founders.',
-  },
-  {
-    year: '2025',
-    title: 'Launched Expense Tracker App',
-    details:
-      'Developed a personal finance app with Python + Kivy, then iterated based on peer feedback loops.',
-  },
-  {
-    year: '2024',
-    title: 'Freelance Student Developer',
-    details:
-      'Delivered modern web pages for local initiatives, improving performance and mobile accessibility.',
-  },
+export const funFacts = [
+  { icon: '🚀', text: 'Started coding when I was 13' },
+  { icon: '🔨', text: 'Built and deployed 20+ automated systems' },
+  { icon: '☕', text: 'Fueled by curiosity and late-night building sessions' },
+  { icon: '🎮', text: 'I build tools to play games better' },
 ]
