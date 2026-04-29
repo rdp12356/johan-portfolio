@@ -1,144 +1,37 @@
 import { useEffect, useState } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
-import { FiArrowUpRight, FiGithub } from 'react-icons/fi'
+import { FiArrowUpRight, FiGithub, FiStar, FiGitBranch } from 'react-icons/fi'
 import { defaultProjects } from '../data/content'
-import { GITHUB_SELECTED_REPOS, GITHUB_REPO_IMAGES } from '../data/config'
-import { supabase } from '../lib/supabase'
 import SectionTitle from './SectionTitle'
 import TiltCard from './TiltCard'
+import { useGitHubData } from '../hooks/useGitHubData'
 
 const GITHUB_USERNAME = import.meta.env.VITE_GITHUB_USERNAME || 'rdp12356'
 const defaultProjectsWithDemo = defaultProjects.filter((project) => Boolean(project.liveUrl))
 
-function formatUpdatedDate(dateValue) {
-  if (!dateValue) {
-    return ''
-  }
-
-  const date = new Date(dateValue)
-  if (Number.isNaN(date.getTime())) {
-    return ''
-  }
-
-  return new Intl.DateTimeFormat('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(date)
-}
-
-function normalizeRepo(repo, index) {
+// Helper to normalize GitHub repo data to Project format
+function normalizeProject(repo, index) {
   const fallbackImages = [
     'https://images.unsplash.com/photo-1529078155058-5d716f45d604?auto=format&fit=crop&w=1400&q=80',
     'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80',
     'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1400&q=80',
     'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80',
-    'https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1400&q=80',
-    'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1400&q=80',
   ]
 
-  const liveUrl = repo.homepage || ''
-  const customImage = GITHUB_REPO_IMAGES[repo.name]
-
-  // Use manual override first, then screenshot API if liveUrl exists, finally fallback
-  let image = fallbackImages[index % fallbackImages.length]
-  if (customImage) {
-    image = customImage
-  } else if (liveUrl) {
-    image = `https://api.microlink.io?url=${encodeURIComponent(liveUrl)}&screenshot=true&meta=false&embed=screenshot.url`
-  }
-
   return {
-    id: repo.name.toLowerCase().replace(/[^a-z0-9-]/g, '-'),
+    id: repo.id,
     title: repo.name,
-    description: repo.description || 'Project repository by Johan Manoj.',
-    image,
-    liveUrl,
+    description: repo.description || 'Professional repository developed by Johan Manoj.',
+    image: repo.homepage 
+      ? `https://api.microlink.io?url=${encodeURIComponent(repo.homepage)}&screenshot=true&meta=false&embed=screenshot.url`
+      : fallbackImages[index % fallbackImages.length],
+    liveUrl: repo.homepage,
     githubUrl: repo.html_url,
-    stars: repo.stargazers_count || 0,
     updatedAt: repo.updated_at,
+    stars: repo.stargazers_count,
+    forks: repo.forks_count,
+    language: repo.language
   }
-}
-
-async function fetchGitHubProjects() {
-  try {
-    const reposParam = GITHUB_SELECTED_REPOS.length > 0 
-      ? `&repos=${encodeURIComponent(GITHUB_SELECTED_REPOS.join(','))}` 
-      : ''
-    const endpointResponse = await fetch(`/api/github-projects?username=${encodeURIComponent(GITHUB_USERNAME)}&limit=10${reposParam}`)
-    if (endpointResponse.ok) {
-      const payload = await endpointResponse.json()
-      if (Array.isArray(payload.projects) && payload.projects.length > 0) {
-        return payload.projects
-      }
-    }
-  } catch {
-    // Ignore endpoint errors and fallback to direct GitHub API fetch.
-  }
-
-  try {
-    const directResponse = await fetch(
-      `https://api.github.com/users/${encodeURIComponent(GITHUB_USERNAME)}/repos?sort=updated&per_page=100`,
-    )
-    if (!directResponse.ok) {
-      return []
-    }
-
-    const repos = await directResponse.json()
-    if (!Array.isArray(repos) || repos.length === 0) {
-      return []
-    }
-
-    return repos
-      .filter((repo) => {
-        const isSelected = GITHUB_SELECTED_REPOS.some(
-          (name) => name.toLowerCase() === repo.name.toLowerCase(),
-        )
-        if (GITHUB_SELECTED_REPOS.length > 0) {
-          return isSelected
-        }
-        return !repo.fork && typeof repo.homepage === 'string' && repo.homepage.trim().length > 0
-      })
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-      .slice(0, 10)
-      .map(normalizeRepo)
-  } catch {
-    return []
-  }
-}
-
-async function fetchProjects() {
-  const githubProjects = await fetchGitHubProjects()
-  if (githubProjects.length > 0) {
-    return githubProjects
-  }
-
-  if (!supabase) {
-    return defaultProjectsWithDemo
-  }
-
-  const { data, error } = await supabase
-    .from('projects')
-    .select('id, title, description, image, live_url, github_url, created_at')
-    .order('created_at', { ascending: false })
-
-  if (error || !data || data.length === 0) {
-    return defaultProjectsWithDemo
-  }
-
-  const supabaseProjects = data
-    .filter((project) => typeof project.live_url === 'string' && project.live_url.trim().length > 0)
-    .map((project) => ({
-      id: project.id,
-      title: project.title,
-      description: project.description,
-      image: project.image,
-      liveUrl: project.live_url,
-      githubUrl: project.github_url,
-      updatedAt: project.created_at,
-    }))
-
-  return supabaseProjects.length > 0 ? supabaseProjects : defaultProjectsWithDemo
 }
 
 function ProjectCard({ project, index }) {
@@ -205,33 +98,52 @@ function ProjectCard({ project, index }) {
         </div>
 
         <div className="p-5 flex-grow flex flex-col">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{project.title}</h3>
-          {project.updatedAt ? (
-            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300 font-medium">
-              Updated {formatUpdatedDate(project.updatedAt)}
-            </p>
-          ) : null}
-          <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3">{project.description}</p>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tighter">{project.title}</h3>
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                <FiStar className="text-amber-400" />
+                {project.stars}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+                <FiGitBranch className="text-slate-400" />
+                {project.forks}
+              </span>
+            </div>
+          </div>
 
-          <div className="mt-auto pt-6 flex gap-3">
-            {project.liveUrl ? (
+          <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300 line-clamp-3 mb-6">
+            {project.description}
+          </p>
+
+          <div className="mt-auto flex items-center justify-between">
+            <div className="flex gap-3">
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-xl bg-cyan-500/10 text-cyan-500 hover:bg-cyan-500 hover:text-white transition-all"
+                  title="Live Demo"
+                >
+                  <FiArrowUpRight size={18} />
+                </a>
+              )}
               <a
-                href={project.liveUrl}
+                href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="glow-button hover-glow inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white transition hover:-translate-y-1 dark:bg-white dark:text-slate-900"
+                className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all"
+                title="View Code"
               >
-                Live Demo <FiArrowUpRight />
+                <FiGithub size={18} />
               </a>
-            ) : null}
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="glow-button hover-glow inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/70 px-4 py-2 text-xs font-semibold text-slate-900 transition hover:-translate-y-1 hover:bg-white dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-            >
-              GitHub <FiGithub />
-            </a>
+            </div>
+            {project.language && (
+              <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                {project.language}
+              </span>
+            )}
           </div>
         </div>
       </Motion.article>
@@ -240,36 +152,36 @@ function ProjectCard({ project, index }) {
 }
 
 function Projects() {
-  const [projects, setProjects] = useState(defaultProjectsWithDemo)
-
-  useEffect(() => {
-    let mounted = true
-
-    fetchProjects().then((result) => {
-      if (mounted) {
-        setProjects(result)
-      }
-    })
-
-    return () => {
-      mounted = false
-    }
-  }, [])
+  const username = 'rdp12356'
+  const { repos, loading } = useGitHubData(username)
+  
+  // Take top 6 high-quality repos
+  const displayProjects = !loading && repos.length > 0 
+    ? repos.slice(0, 6).map(normalizeProject)
+    : []
 
   return (
     <section id="projects" className="px-6 py-24 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionTitle
-          eyebrow="Projects"
-          title="Selected Work"
-          description="A snapshot of projects I have built across social impact, productivity, and education domains."
+          eyebrow="Portfolio"
+          title="Recent Deployments"
+          description="High-performance systems and automated solutions fetched directly from my GitHub ecosystem."
         />
 
-        <div className="grid gap-6 lg:grid-cols-3">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid gap-6 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-[4/3] rounded-[2.5rem] bg-slate-100 dark:bg-slate-900 animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-3">
+            {displayProjects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

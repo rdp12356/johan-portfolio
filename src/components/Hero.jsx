@@ -1,4 +1,6 @@
 import { motion as Motion } from 'framer-motion'
+import TechMarquee from './TechMarquee'
+import { useGitHubData } from '../hooks/useGitHubData'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -17,6 +19,10 @@ const itemVariants = {
 }
 
 function Hero() {
+  const username = 'rdp12356'
+  const { repos, loading } = useGitHubData(username)
+  const latestProject = !loading && repos.length > 0 ? repos[0].name : 'AI Tools'
+
   const scrollToSection = (sectionId) => {
     const target = document.getElementById(sectionId)
     if (target) {
@@ -41,16 +47,16 @@ function Hero() {
 
         <Motion.h1
           variants={itemVariants}
-          className="mt-5 max-w-4xl text-5xl font-semibold leading-tight text-slate-900 dark:text-white sm:text-6xl md:text-7xl"
+          className="mt-5 max-w-4xl text-5xl font-black leading-tight text-slate-900 dark:text-white sm:text-6xl md:text-8xl tracking-tighter"
         >
           Johan Manoj
         </Motion.h1>
 
         <Motion.p
           variants={itemVariants}
-          className="mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-300 sm:text-xl"
+          className="mt-5 max-w-2xl text-lg font-bold text-slate-600 dark:text-slate-300 sm:text-2xl"
         >
-          Student | Developer | Builder
+          AI Automation Developer | Cloud Systems Builder
         </Motion.p>
 
         <Motion.p
@@ -74,7 +80,26 @@ function Hero() {
             Contact Me
           </button>
         </Motion.div>
+
+        {/* Status Indicator */}
+        <Motion.div 
+          variants={itemVariants}
+          className="mt-16 flex items-center gap-3"
+        >
+          <div className="relative flex h-3 w-3">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500"></span>
+          </div>
+          <span className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+            Current Status: <span className="text-slate-900 dark:text-white">{loading ? 'Syncing...' : `Building ${latestProject}`} 🔨</span>
+          </span>
+        </Motion.div>
       </Motion.div>
+
+      {/* Background Marquee */}
+      <div className="absolute bottom-0 left-0 w-full opacity-50">
+        <TechMarquee />
+      </div>
     </section>
   )
 }

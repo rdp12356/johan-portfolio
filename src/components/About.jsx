@@ -1,5 +1,6 @@
 import { motion as Motion } from 'framer-motion'
 import { FiCpu, FiGlobe, FiSmartphone } from 'react-icons/fi'
+import LabTerminal from './LabTerminal'
 import SectionTitle from './SectionTitle'
 import TiltCard from './TiltCard'
 
@@ -48,22 +49,13 @@ function About() {
           </Motion.div>
           </TiltCard>
 
-          <TiltCard className="futuristic-card hover-glow">
-            <Motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            whileHover={{ y: -6 }}
-            className="group glass-card flex items-center justify-center p-4"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80"
-              alt="Johan Manoj profile"
-              className="h-[320px] w-full rounded-2xl object-cover transition duration-500 group-hover:scale-[1.03]"
-            />
-          </Motion.div>
-          </TiltCard>
+          <div className="flex flex-col gap-6">
+            <LabTerminal />
+            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-cyan-500/5 p-6 backdrop-blur-xl">
+              <p className="text-[10px] font-black uppercase tracking-widest text-cyan-500 mb-2">Current Location</p>
+              <p className="text-sm font-bold text-slate-700 dark:text-slate-300">Kochi, India 🇮🇳</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

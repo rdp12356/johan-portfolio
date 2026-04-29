@@ -11,6 +11,8 @@ import Navbar from './components/Navbar'
 import Preloader from './components/Preloader'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
+import GitHubActivity from './components/GitHubActivity'
+import Services from './components/Services'
 import { navLinks } from './data/content'
 import { useActiveSection } from './hooks/useActiveSection'
 import { useGamification } from './hooks/useGamification'
@@ -42,7 +44,9 @@ function App() {
       <main>
         <Hero />
         <About />
+        <Services />
         <Skills />
+        <GitHubActivity />
         <Projects />
         <Experience />
         <Contact />
