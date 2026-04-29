@@ -34,26 +34,15 @@ export const defaultProjects = [
     updatedAt: '2026-04-11T00:00:00.000Z',
   },
   {
-    id: 'expense-master',
-    title: 'ExpenseMaster',
+    id: 'auratune',
+    title: 'AuraTune',
     description:
-      'Open-source expense management system built with Python, Supabase, and Vercel deployment workflows.',
+      'A scientifically-tuned binaural beats platform for focus and relaxation. Cross-platform support.',
     image:
       'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80',
-    liveUrl: 'https://expense-master-xi.vercel.app/',
-    githubUrl: 'https://github.com/rdp12356/ExpenseMaster',
+    liveUrl: 'https://auratune.vercel.app/',
+    githubUrl: 'https://github.com/rdp12356/AuraTune',
     updatedAt: '2026-03-28T00:00:00.000Z',
-  },
-  {
-    id: 'cyberguardian-platform',
-    title: 'CyberGuardian Platform',
-    description:
-      'Comprehensive cybersecurity platform featuring interactive tools, analytics, and threat management modules.',
-    image:
-      'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=1400&q=80',
-    liveUrl: '',
-    githubUrl: 'https://github.com/rdp12356/cyberguardian-platform',
-    updatedAt: '2025-06-22T00:00:00.000Z',
   },
 ]
 

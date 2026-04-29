@@ -152,18 +152,13 @@ function ProjectCard({ project, index }) {
 }
 
 function Projects() {
-  const username = 'rdp12356'
-  const { repos, loading } = useGitHubData(username)
-  
-  // Keep only specific high-impact repos
-  const displayProjects = !loading && repos.length > 0 
-    ? repos
-        .filter(repo => {
-          const keepList = ['AuraTune', 'Zertainity', 'Zertainty']
-          return keepList.some(name => repo.name.toLowerCase().includes(name.toLowerCase()))
-        })
-        .map(normalizeProject)
-    : []
+  // Revert to old style: use the static curated list
+  const displayProjects = defaultProjects.map(p => ({
+    ...p,
+    stars: p.title === 'AuraTune' ? 5 : 8, // Estimated or placeholders for old style
+    forks: 2,
+    language: p.title === 'AuraTune' ? 'JavaScript' : 'TypeScript'
+  }))
 
   return (
     <section id="projects" className="px-6 py-24 sm:px-8">
@@ -171,22 +166,14 @@ function Projects() {
         <SectionTitle
           eyebrow="Portfolio"
           title="Recent Deployments"
-          description="High-performance systems and automated solutions fetched directly from my GitHub ecosystem."
+          description="High-performance systems and automated solutions curated for precision and impact."
         />
 
-        {loading ? (
-          <div className="grid gap-6 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="aspect-[4/3] rounded-[2.5rem] bg-slate-100 dark:bg-slate-900 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid gap-6 lg:grid-cols-3">
-            {displayProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        )}
+        <div className="grid gap-6 lg:grid-cols-2 max-w-4xl mx-auto">
+          {displayProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   )

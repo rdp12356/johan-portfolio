@@ -66,25 +66,7 @@ async function fetchExperienceFromGitHub() {
 }
 
 function Experience() {
-  const [timelineItems, setTimelineItems] = useState(timeline)
-
-  useEffect(() => {
-    let mounted = true
-
-    fetchExperienceFromGitHub().then((items) => {
-      if (!mounted) {
-        return
-      }
-
-      if (items.length > 0) {
-        setTimelineItems(items)
-      }
-    })
-
-    return () => {
-      mounted = false
-    }
-  }, [])
+  const timelineItems = timeline
 
   return (
     <section id="experience" className="px-6 py-24 sm:px-8">
