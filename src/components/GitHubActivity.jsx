@@ -91,13 +91,23 @@ function GitHubActivity() {
                 src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=dark&bg_color=00000000&title_color=06b6d4&text_color=94a3b8&icon_color=06b6d4&border_color=00000000&hide_border=true&count_private=true&include_all_commits=true`} 
                 alt="GitHub Stats"
                 className="w-full max-w-md dark:block hidden"
-                onError={(e) => { e.target.src = `https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=2077` }}
+                onError={(e) => { 
+                  if (!e.target.dataset.triedFallback) {
+                    e.target.dataset.triedFallback = 'true'
+                    e.target.src = `https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=2077` 
+                  }
+                }}
               />
               <img 
                 src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=light&bg_color=00000000&title_color=06b6d4&text_color=475569&icon_color=06b6d4&border_color=00000000&hide_border=true&count_private=true&include_all_commits=true`} 
                 alt="GitHub Stats"
                 className="w-full max-w-md dark:hidden block"
-                onError={(e) => { e.target.src = `https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=default` }}
+                onError={(e) => { 
+                  if (!e.target.dataset.triedFallback) {
+                    e.target.dataset.triedFallback = 'true'
+                    e.target.src = `https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=default` 
+                  }
+                }}
               />
             </div>
           </Motion.div>
