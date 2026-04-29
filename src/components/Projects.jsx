@@ -155,9 +155,16 @@ function Projects() {
   const username = 'rdp12356'
   const { repos, loading } = useGitHubData(username)
   
-  // Take top 6 high-quality repos
+  // Filter and Take top 6 high-quality repos with live previews
   const displayProjects = !loading && repos.length > 0 
-    ? repos.slice(0, 6).map(normalizeProject)
+    ? repos
+        .filter(repo => {
+          const isExcluded = ['Adithya-Portfolio-Website'].includes(repo.name)
+          const hasPreview = repo.homepage && repo.homepage.trim().length > 0
+          return !isExcluded && hasPreview
+        })
+        .slice(0, 6)
+        .map(normalizeProject)
     : []
 
   return (

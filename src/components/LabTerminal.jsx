@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { motion as Motion } from 'framer-motion'
 import { FiTerminal, FiX, FiMinus, FiMaximize2 } from 'react-icons/fi'
 import { useGitHubData } from '../hooks/useGitHubData'
 
